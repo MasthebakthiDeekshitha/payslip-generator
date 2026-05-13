@@ -15,12 +15,15 @@
     <!-- CSS -->
 
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
 
 <body>
 
-<div class="main-container">
+<div class="main-container" id="payslip">
 
     <!-- ================= HEADER ================= -->
 
@@ -108,7 +111,7 @@
                 <div class="pay-period">
 
                      <input
-    type="month"
+    type="date"
     id="payPeriod"
     class="form-control"
     onchange="setLastDate()">
@@ -134,28 +137,37 @@
 type="text"
 id="pfNo"
 class="form-control"
-maxlength="10"
-placeholder="Enter PF.No"
+maxlength="13"
+placeholder="Enter PF No"
 
 oninput="
-this.value=this.value.toUpperCase();
+this.value=this.value.toUpperCase().replace(/[^A-Z0-9\/\-]/g,'')
+"
 
-if(this.value.length<=2){
+onblur="
 
-this.value=this.value.replace(/[^A-Z]/g,'');
+let pfPattern = /^[A-Z]{2}[0-9]{5}\/[0-9]{5}$/;
+
+if(this.value!='' && !pfPattern.test(this.value)){
+
+this.style.border='2px solid red';
+
+document.getElementById('pfError').innerHTML=
+'Enter Valid PF No';
 
 }
 
 else{
 
-let first=this.value.substring(0,2).replace(/[^A-Z]/g,'');
+this.style.border='1px solid #ccc';
 
-let second=this.value.substring(2).replace(/[^0-9]/g,'');
-
-this.value=first+second;
+document.getElementById('pfError').innerHTML='';
 
 }
 ">
+
+<small id="pfError" class="error-text"></small>
+
 
             </div>
 
@@ -170,33 +182,40 @@ this.value=first+second;
             <div class="detail-row-inline">
 
                 <label>Pers. No.</label>
-
-                <input
+<input
 type="text"
 id="persNo"
 class="form-control"
 maxlength="7"
-placeholder="Enter Pers. No"
+placeholder="Enter Pers No"
 
 oninput="
-this.value=this.value.toUpperCase();
+this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')
+"
 
-if(this.value.length<=3){
+onblur="
 
-this.value=this.value.replace(/[^A-Z]/g,'');
+let persPattern = /^[A-Z]{3}[0-9]{4}$/;
+
+if(this.value!='' && !persPattern.test(this.value)){
+
+this.style.border='2px solid red';
+
+document.getElementById('persError').innerHTML=
+'Enter Valid Pers No';
 
 }
 
 else{
 
-let first=this.value.substring(0,3).replace(/[^A-Z]/g,'');
+this.style.border='1px solid #ccc';
 
-let second=this.value.substring(3).replace(/[^0-9]/g,'');
-
-this.value=first+second;
+document.getElementById('persError').innerHTML='';
 
 }
 ">
+
+<small id="persError" class="error-text"></small>
             </div>
 
 
@@ -213,37 +232,33 @@ class="form-control"
 maxlength="10"
 placeholder="Enter PAN"
 
-
-
-pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
-
 oninput="
-this.value=this.value.toUpperCase();
+this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')
+"
 
-if(this.value.length<=5){
-this.value=this.value.replace(/[^A-Z]/g,'');
-}
+onblur="
 
-else if(this.value.length<=9){
+let panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+if(this.value!='' && !panPattern.test(this.value)){
 
-let first=this.value.substring(0,5).replace(/[^A-Z]/g,'');
+this.style.border='2px solid red';
 
-let second=this.value.substring(5).replace(/[^0-9]/g,'');
+document.getElementById('panError').innerHTML=
+'Enter Valid PAN ';
 
-this.value=first+second;
 }
 
 else{
 
-let first=this.value.substring(0,5).replace(/[^A-Z]/g,'');
+this.style.border='1px solid #ccc';
 
-let second=this.value.substring(5,9).replace(/[^0-9]/g,'');
+document.getElementById('panError').innerHTML='';
 
-let third=this.value.substring(9,10).replace(/[^A-Z]/g,'');
-
-this.value=first+second+third;
 }
 ">
+
+<small id="panError" class="error-text"></small>
+
             </div>
 
 
@@ -265,11 +280,65 @@ this.value=first+second+third;
 
                 <label>Paid Days</label>
 
-               <input type="number"
-                      id="paidDays"
-                      class="form-control"
-                      step="0.01"
-                      placeholder="0.00">
+              <input
+type="text"
+id="paidDays"
+class="form-control"
+maxlength="5"
+value="0.00"
+placeholder="Enter Paid Days"
+
+oninput="
+
+this.value=this.value.replace(/[^0-9.]/g,'');
+
+if((this.value.match(/\./g)||[]).length>1){
+
+this.value=this.value.slice(0,-1);
+
+}
+
+let parts=this.value.split('.');
+
+if(parts[0].length>2){
+
+parts[0]=parts[0].slice(0,2);
+
+}
+
+if(parts[1]){
+
+parts[1]=parts[1].slice(0,2);
+
+}
+
+this.value=parts.join('.');
+
+"
+
+onblur="
+
+let paidPattern=/^[0-9]{1,2}(\.[0-9]{1,2})?$/;
+
+if(this.value!='' && !paidPattern.test(this.value)){
+
+this.style.border='2px solid red';
+
+document.getElementById('paidError').innerHTML=
+'Enter Valid Paid Days (Ex: 19 or 19.50)';
+
+}
+
+else{
+
+this.style.border='1px solid #ccc';
+
+document.getElementById('paidError').innerHTML='';
+
+}
+">
+
+<small id="paidError" class="error-text"></small>
 
             </div>
 
@@ -279,7 +348,7 @@ this.value=first+second+third;
 
                 <label>UAN</label>
 
-               <input
+<input
 type="text"
 id="uan"
 class="form-control"
@@ -287,9 +356,32 @@ maxlength="12"
 placeholder="Enter UAN"
 
 oninput="
-this.value=this.value.replace(/[^0-9]/g,'');
+this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')
+"
+
+onblur="
+
+let uanPattern = /^[A-Z]{2}[0-9]{10}$/;
+
+if(this.value!='' && !uanPattern.test(this.value)){
+
+this.style.border='2px solid red';
+
+document.getElementById('uanError').innerHTML=
+'Enter Valid UAN ';
+
+}
+
+else{
+
+this.style.border='1px solid #ccc';
+
+document.getElementById('uanError').innerHTML='';
+
+}
 ">
 
+<small id="uanError" class="error-text"></small>
             </div>
 
         </div>
@@ -338,12 +430,11 @@ this.value=this.value.replace(/[^0-9]/g,'');
 
     <label>Basic Pay</label>
 
-    <input
-    type="number"
-    id="basicPay"
-    class="form-control"
-    step="0.01"
-    placeholder="0.00">
+   <input
+type="number"
+id="basicPay"
+class="form-control"
+oninput="calculatePayslip()">
 
     <input
     type="text"
@@ -384,13 +475,11 @@ this.value=this.value.replace(/[^0-9]/g,'');
 <div class="salary-row">
 
     <label>Transport Allowance</label>
-
-    <input
-    type="number"
-    id="transport"
-    class="form-control"
-    step="0.01"
-    placeholder="0.00">
+<input
+type="number"
+id="transport"
+class="form-control"
+oninput="calculatePayslip()">
 
     <input
     type="text"
@@ -409,12 +498,11 @@ this.value=this.value.replace(/[^0-9]/g,'');
 
     <label>Meal Coupon</label>
 
-    <input
-    type="number"
-    id="meal"
-    class="form-control"
-    step="0.01"
-    placeholder="0.00">
+   <input
+type="number"
+id="meal"
+class="form-control"
+oninput="calculatePayslip()">
 
     <input
     type="text"
@@ -429,22 +517,24 @@ this.value=this.value.replace(/[^0-9]/g,'');
 
         <!-- TOTAL EARNINGS -->
 
-       <div class="salary-row total-row">
+      <div class="salary-row total-row">
 
     <label>Total Earnings</label>
+
+    <!-- CURRENT PERIOD -->
 
     <input
     type="text"
     id="totalEarnings"
     class="form-control readonly-field"
-    value="0.00"
     readonly>
+
+    <!-- YEAR TO DATE -->
 
     <input
     type="text"
     id="totalEarningsYear"
     class="form-control readonly-field"
-    value="0.00"
     readonly>
 
 </div>
@@ -464,52 +554,45 @@ this.value=this.value.replace(/[^0-9]/g,'');
 
 
     <!-- Income Tax -->
+<div class="salary-row">
 
-    <div class="salary-row">
+    <label>Income Tax</label>
 
-        <label>Income Tax</label>
+    <input
+    type="text"
+    id="incomeTax"
+    class="form-control readonly-field"
+    readonly>
 
-        <input
-        type="text"
-        id="incomeTax"
-        class="form-control readonly-field"
-        value="0.00"
-        readonly>
+    <input
+    type="text"
+    id="incomeTaxYear"
+    class="form-control readonly-field"
+    readonly>
 
-        <input
-        type="text"
-        id="incomeTaxYear"
-        class="form-control readonly-field"
-        value="0.00"
-        readonly>
-
-    </div>
+</div>
 
 
 
     <!-- Total Tax -->
+<div class="salary-row total-row">
 
-    <div class="salary-row total-row">
+    <label>Total Tax</label>
 
-        <label>Total Tax</label>
+    <input
+    type="text"
+    id="totalTax"
+    class="form-control readonly-field"
+    readonly>
 
-        <input
-        type="text"
-        id="totalTax"
-        class="form-control readonly-field"
-        value="0.00"
-        readonly>
+    <input
+    type="text"
+    id="totalTaxYear"
+    class="form-control readonly-field"
+    readonly>
 
-        <input
-        type="text"
-        id="totalTaxYear"
-        class="form-control readonly-field"
-        value="0.00"
-        readonly>
-
-    </div>
-
-</div><!-- ================= DEDUCTIONS ================= -->
+</div>
+<!-- ================= DEDUCTIONS ================= -->
 
 <div class="section-box">
 
@@ -550,11 +633,10 @@ this.value=this.value.replace(/[^0-9]/g,'');
         <label>Prof Tax - Full period</label>
 
         <input
-        type="number"
-        id="professionalTax"
-        class="form-control"
-        step="0.01"
-        placeholder="0.00">
+type="number"
+id="professionalTax"
+class="form-control"
+oninput="calculatePayslip()">
 
         <input
         type="text"
@@ -574,11 +656,10 @@ this.value=this.value.replace(/[^0-9]/g,'');
         <label>Med. Insurance - Sr. Citizen</label>
 
         <input
-        type="number"
-        id="insurance"
-        class="form-control"
-        step="0.01"
-        placeholder="0.00">
+type="number"
+id="insurance"
+class="form-control"
+oninput="calculatePayslip()">
 
         <input
         type="text"
@@ -598,11 +679,10 @@ this.value=this.value.replace(/[^0-9]/g,'');
         <label>Sodexo Deduction</label>
 
         <input
-        type="number"
-        id="sodexo"
-        class="form-control"
-        step="0.01"
-        placeholder="0.00">
+type="number"
+id="sodexo"
+class="form-control"
+oninput="calculatePayslip()">
 
         <input
         type="text"
@@ -754,11 +834,11 @@ this.value=this.value.replace(/[^0-9]/g,'');
     <div class="formula-grid">
 
         <input
-        type="text"
-        id="netPay"
-        class="form-control readonly-field"
-        value="0.00"
-        readonly>
+type="text"
+id="netPay"
+class="form-control readonly-field"
+readonly>
+
 
         <input
         type="text"
@@ -791,23 +871,23 @@ this.value=this.value.replace(/[^0-9]/g,'');
 
     <div class="button-section">
 
+       
+       <button
+type="button"
+class="btn btn-success"
+onclick="validateAndSave()">
+
+Save Payslip
+
+</button>
         <button
-        type="button"
-        class="btn btn-primary btn-lg"
-        onclick="calculatePayslip()">
+type="button"
+class="btn btn-danger"
+onclick="downloadPayslip()">
 
-            Calculate
+Download Payslip
 
-        </button>
-
-        <button
-        type="button"
-        class="btn btn-success btn-lg"
-        onclick="savePayslip()">
-
-            Save Payslip
-
-        </button>
+</button>
 
     </div>
 
