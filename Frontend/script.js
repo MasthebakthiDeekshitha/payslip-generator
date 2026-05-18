@@ -1,412 +1,273 @@
 function calculatePayslip() {
 
-    // BASIC PAY
+    // =========================
+    // BASIC VALUES
+    // =========================
 
     let basicPay =
-        parseFloat(document.getElementById("basicPay").value) || 0;
-
-    // HRA = 50%
-
-    let hra = basicPay * 0.50;
-
-    // TRANSPORT
+    parseFloat(document.getElementById("basicPay").value) || 0;
 
     let transport =
-        parseFloat(document.getElementById("transport").value) || 0;
-
-    // MEAL
+    parseFloat(document.getElementById("transport").value) || 0;
 
     let meal =
-        parseFloat(document.getElementById("meal").value) || 0;
-
-    // TOTAL EARNINGS
-
-    let totalEarnings =
-        basicPay + hra + transport + meal;
-
-    // TAX
-
-    let incomeTax =
-        totalEarnings * 0.10;
-
-    // PF
-
-    let pfContribution =
-        basicPay * 0.12;
-
-    // PROFESSIONAL TAX
+    parseFloat(document.getElementById("meal").value) || 0;
 
     let professionalTax =
-        parseFloat(document.getElementById("professionalTax").value) || 0;
-
-    // INSURANCE
+    parseFloat(document.getElementById("professionalTax").value) || 0;
 
     let insurance =
-        parseFloat(document.getElementById("insurance").value) || 0;
-
-    // SODEXO
+    parseFloat(document.getElementById("insurance").value) || 0;
 
     let sodexo =
-        parseFloat(document.getElementById("sodexo").value) || 0;
+    parseFloat(document.getElementById("sodexo").value) || 0;
 
-    // TOTAL DEDUCTIONS
 
-    let totalDeductions =
-        pfContribution +
-        professionalTax +
-        insurance +
-        sodexo;
-
-    // NET PAY
-
-    let netPay =
-        totalEarnings -
-        incomeTax -
-        totalDeductions;
-
-
-
-
-
-    // ================= SET CURRENT PERIOD =================
-
-    document.getElementById("hra").value =
-        hra.toFixed(2);
-
-    document.getElementById("totalEarnings").value =
-        totalEarnings.toFixed(2);
-
-    document.getElementById("incomeTax").value =
-        incomeTax.toFixed(2);
-
-    document.getElementById("totalTax").value =
-        incomeTax.toFixed(2);
-
-    document.getElementById("pfContribution").value =
-        pfContribution.toFixed(2);
-
-    document.getElementById("totalDeductions").value =
-        totalDeductions.toFixed(2);
-
-    document.getElementById("netPay").value =
-        netPay.toFixed(2);
-        document.getElementById("formulaEarnings").value =
-    totalEarnings.toFixed(2);
-
-document.getElementById("formulaTaxes").value =
-    incomeTax.toFixed(2);
-
-document.getElementById("formulaDeductions").value =
-    totalDeductions.toFixed(2);
-
-
-
-
-
-    // ================= YEAR TO DATE =================
-
-    document.getElementById("basicPayYear").value =
-    (basicPay * 12).toFixed(2);
-
-    document.getElementById("hraYear").value =
-        (hra * 12).toFixed(2);
-
-    document.getElementById("transportYear").value =
-        (transport * 12).toFixed(2);
-
-    document.getElementById("mealYear").value =
-        (meal * 12).toFixed(2);
-
-    document.getElementById("totalEarningsYear").value =
-        (totalEarnings * 12).toFixed(2);
-
-    document.getElementById("incomeTaxYear").value =
-        (incomeTax * 12).toFixed(2);
-
-    document.getElementById("totalTaxYear").value =
-        (incomeTax * 12).toFixed(2);
-
-    document.getElementById("pfYear").value =
-        (pfContribution * 12).toFixed(2);
-        document.getElementById("professionalTaxYear").value =
-    (professionalTax * 12).toFixed(2);
-
-document.getElementById("insuranceYear").value =
-    (insurance * 12).toFixed(2);
-
-document.getElementById("sodexoYear").value =
-    (sodexo * 12).toFixed(2);
-
-document.getElementById("totalDeductionsYear").value =
-    (totalDeductions * 12).toFixed(2);
-
-    
-
-}
-async function savePayslip() {
-
-    const data = {
-
-    // EMPLOYEE DETAILS
-
-    name:
-        document.getElementById("name").value,
-
-    designation:
-        document.getElementById("designation").value,
-
-    department:
-        document.getElementById("department").value,
-
-    payPeriod:
-        document.getElementById("payPeriod").value,
-
-    pfNo:
-        document.getElementById("pfNo").value,
-
-    persNo:
-        document.getElementById("persNo").value,
-
-    pan:
-        document.getElementById("pan").value,
-
-    doj:
-        document.getElementById("doj").value,
-
-    paidDays:
-        document.getElementById("paidDays").value,
-
-    uan:
-        document.getElementById("uan").value,
-
-
-
-    // EARNINGS
-
-    basicPay:
-        document.getElementById("basicPay").value,
-
-    hra:
-        document.getElementById("hra").value,
-
-    transport:
-        document.getElementById("transport").value,
-
-    meal:
-        document.getElementById("meal").value,
-
-    totalEarnings:
-        document.getElementById("totalEarnings").value,
-
-
-
-    // TAXES
-
-    incomeTax:
-        document.getElementById("incomeTax").value,
-
-    totalTax:
-        document.getElementById("totalTax").value,
-
-
-
-    // DEDUCTIONS
-
-    pfContribution:
-        document.getElementById("pfContribution").value,
-
-    professionalTax:
-        document.getElementById("professionalTax").value,
-
-    insurance:
-        document.getElementById("insurance").value,
-
-    sodexo:
-        document.getElementById("sodexo").value,
-
-    totalDeductions:
-        document.getElementById("totalDeductions").value,
-
-
-
-    // BANK
-
-    bankName:
-        document.getElementById("bankName").value,
-
-    bankAccount:
-        document.getElementById("bankAccount").value,
-
-
-
-    // NET PAY
-
-    netPay:
-        document.getElementById("netPay").value
-
-};
-
-
-
-
-    try {
-
-        const response = await fetch(
-            "http://localhost:5000/savePayslip",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify(data)
-            }
-        );
-
-
-
-        const result = await response.json();
-
-
-
-        if (response.ok) {
-
-            alert("Payslip Saved Successfully!");
-
-            console.log(result);
-
-        } else {
-
-            alert("Failed To Save Payslip");
-
-        }
-
-    } catch (error) {
-
-        console.log(error);
-
-        alert("Server Connection Error");
-
-    }
-
-}
-function setLastDate() {
+    // =========================
+    // PAY PERIOD DATE
+    // =========================
 
     let payPeriod =
-        document.getElementById("payPeriod").value;
+    document.getElementById("payPeriod").value;
+
+    let totalDays = 30;
+    let paidDays = 30;
 
     if(payPeriod){
 
-        let parts = payPeriod.split("-");
+        let selectedDate =
+        new Date(payPeriod);
 
-        let year = parts[0];
+        let year =
+        selectedDate.getFullYear();
 
-        let month = parts[1];
+        let month =
+        selectedDate.getMonth();
 
+        // Total days in selected month
+        totalDays =
+        new Date(year, month + 1, 0).getDate();
 
+        // Selected start day
+        let selectedDay =
+        selectedDate.getDate();
 
-        let lastDay =
-            new Date(year, month, 0).getDate();
-
-
-
-        document.getElementById("payDate").value =
-            `${lastDay}-${month}-${year}`;
-
-
-
-        document.getElementById("paidDays").value =
-            lastDay;
-
+        // Paid days calculation
+        paidDays =
+        totalDays - selectedDay + 1;
     }
-  }
-async function downloadPayslip(){
 
-const { jsPDF } = window.jspdf;
 
-const payslip =
-document.getElementById("payslip");
+    // =========================
+    // PAID DAYS
+    // =========================
 
-const canvas =
-await html2canvas(payslip);
+    document.getElementById("paidDays").value =
+    paidDays.toFixed(2);
 
-const imgData =
-canvas.toDataURL("image/png");
 
-const pdf =
-new jsPDF('p','mm','a4');
+    // =========================
+    // ACTUAL BASIC
+    // =========================
 
-const pdfWidth =
-pdf.internal.pageSize.getWidth();
+    let actualBasic =
+    (basicPay / totalDays) * paidDays;
 
-const pdfHeight =
-(canvas.height * pdfWidth) / canvas.width;
 
-pdf.addImage(
-imgData,
-'PNG',
-0,
-0,
-pdfWidth,
-pdfHeight
-);
+    // =========================
+    // HRA
+    // =========================
 
-pdf.save("Payslip.pdf");
+    let hra =
+    actualBasic * 0.50;
+
+
+    // =========================
+    // TOTAL EARNINGS
+    // =========================
+
+    let totalEarnings =
+    actualBasic +
+    hra +
+    transport +
+    meal;
+
+
+    // =========================
+    // INCOME TAX
+    // =========================
+
+    let incomeTax =
+    totalEarnings * 0.10;
+
+
+    // =========================
+    // PF CONTRIBUTION
+    // =========================
+
+    let pf =
+    actualBasic * 0.12;
+
+
+    // =========================
+    // TOTAL DEDUCTIONS
+    // =========================
+
+    let totalDeductions =
+    pf +
+    professionalTax +
+    insurance +
+    sodexo;
+
+
+    // =========================
+    // NET PAY
+    // =========================
+
+    let netPay =
+    totalEarnings -
+    incomeTax -
+    totalDeductions;
+
+
+    // =========================
+    // CURRENT PERIOD VALUES
+    // =========================
+
+    document.getElementById("hra").value =
+    hra.toFixed(2);
+
+    document.getElementById("incomeTax").value =
+    incomeTax.toFixed(2);
+
+    document.getElementById("pfContribution").value =
+    pf.toFixed(2);
+
+    document.getElementById("totalEarnings").value =
+    totalEarnings.toFixed(2);
+
+    document.getElementById("totalTax").value =
+    incomeTax.toFixed(2);
+
+    document.getElementById("totalDeductions").value =
+    totalDeductions.toFixed(2);
+
+    document.getElementById("netPay").value =
+    netPay.toFixed(2);
+
+
+    // =========================
+    // YEAR VALUES
+    // =========================
+
+    document.getElementById("basicPayYear").value =
+    (actualBasic * 12).toFixed(2);
+
+    document.getElementById("hraYear").value =
+    (hra * 12).toFixed(2);
+
+    document.getElementById("transportYear").value =
+    (transport * 12).toFixed(2);
+
+    document.getElementById("mealYear").value =
+    (meal * 12).toFixed(2);
+
+    document.getElementById("incomeTaxYear").value =
+    (incomeTax * 12).toFixed(2);
+
+    document.getElementById("pfYear").value =
+    (pf * 12).toFixed(2);
+
+    document.getElementById("professionalTaxYear").value =
+    (professionalTax * 12).toFixed(2);
+
+    document.getElementById("insuranceYear").value =
+    (insurance * 12).toFixed(2);
+
+    document.getElementById("sodexoYear").value =
+    (sodexo * 12).toFixed(2);
+
+    document.getElementById("totalEarningsYear").value =
+    (totalEarnings * 12).toFixed(2);
+
+    document.getElementById("totalTaxYear").value =
+    (incomeTax * 12).toFixed(2);
+
+    document.getElementById("totalDeductionsYear").value =
+    (totalDeductions * 12).toFixed(2);
+
+
+    // =========================
+    // FORMULA VALUES
+    // =========================
+
+    document.getElementById("formulaEarnings").value =
+    totalEarnings.toFixed(2);
+
+    document.getElementById("formulaTaxes").value =
+    incomeTax.toFixed(2);
+
+    document.getElementById("formulaDeductions").value =
+    totalDeductions.toFixed(2);
 
 }
-function validateAndSave(){
+function savePayslip(){
 
-let pan =
+let isValid = true;
+
+const requiredFields =
+document.querySelectorAll('.required-field');
+
+requiredFields.forEach(field=>{
+
+field.classList.remove('error-border');
+
+if(field.value.trim()===""){
+
+field.classList.add('error-border');
+
+isValid=false;
+
+}
+
+/* REMOVE RED WHEN USER TYPES */
+
+field.addEventListener('input',function(){
+
+if(this.value.trim()!==""){
+
+this.classList.remove('error-border');
+
+}
+
+});
+
+});
+
+/* STOP SAVE IF EMPTY */
+
+if(!isValid){
+
+alert("Please fill all required details correctly.");
+
+return;
+
+}
+
+/* PAN VALIDATION */
+
+const pan =
 document.getElementById("pan").value;
 
-let persNo =
-document.getElementById("persNo").value;
-
-let pfNo =
-document.getElementById("pfNo").value;
-
-let uan =
-document.getElementById("uan").value;
-
-let paidDays =
-document.getElementById("paidDays").value;
-
-
-
-let panPattern =
+const panPattern =
 /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
 
-let persPattern =
-/^[A-Z]{3}[0-9]{4}$/;
+if(!panPattern.test(pan)){
 
-let pfPattern =
-/^[A-Z]{2}[0-9]{5}\/[0-9]{5}$/;
+alert("Invalid PAN format.");
 
-let uanPattern =
-/^[0-9]{12}$/;
-
-let paidPattern =
-/^[0-9]{1,2}(\.[0-9]{1,2})?$/;
-
-
-
-if(
-(pan!='' && !panPattern.test(pan)) ||
-
-(persNo!='' && !persPattern.test(persNo)) ||
-
-(pfNo!='' && !pfPattern.test(pfNo)) ||
-
-(uan!='' && !uanPattern.test(uan)) ||
-
-(paidDays!='' && !paidPattern.test(paidDays))
-
-){
-
-alert(
-'Please Check Details Again Before Saving'
-);
+document.getElementById("pan")
+.classList.add("error-border");
 
 return;
 
@@ -414,15 +275,158 @@ return;
 
 
 
-let confirmSave =
-confirm(
-'Are You Sure You Want To Save Payslip?'
+/* PAID DAYS VALIDATION */
+
+const paidDays =
+parseFloat(
+document.getElementById("paidDays").value
 );
 
-if(confirmSave){
+if(isNaN(paidDays) || paidDays<=0){
 
-savePayslip();
+alert("Invalid Paid Days.");
+
+document.getElementById("paidDays")
+.classList.add("error-border");
+
+return;
 
 }
+
+/* CONFIRMATION */
+
+const confirmSave =
+confirm(
+"Please check all entered details carefully.\n\nDo you want to save the payslip?"
+);
+
+if(!confirmSave){
+
+return;
+
+}
+
+
+/* SUCCESS MESSAGE */
+
+alert("Payslip saved successfully!");
+
+console.log("Payslip Saved");
+
+}function setLastDate() {
+
+    let payPeriod = document.getElementById("payPeriod").value;
+
+    if (!payPeriod) return;
+
+    let selectedDate = new Date(payPeriod);
+
+    let year = selectedDate.getFullYear();
+    let month = selectedDate.getMonth();
+
+    // Last date of selected month
+    let lastDate = new Date(year, month + 1, 0);
+
+    // Format last date
+    let day = String(lastDate.getDate()).padStart(2, '0');
+    let monthValue = String(month + 1).padStart(2, '0');
+    let formattedDate = `${day}-${monthValue}-${year}`;
+
+    document.getElementById("payDate").value = formattedDate;
+
+    // Calculate Paid Days
+    let selectedDay = selectedDate.getDate();
+    let totalDays = lastDate.getDate();
+
+    let paidDays = totalDays - selectedDay + 1;
+
+    document.getElementById("paidDays").value = paidDays;
+
+    calculateSalary();
+}
+function downloadPayslip(){
+
+let requiredFields = [
+
+"name",
+"persNo",
+"designation",
+"pan",
+"department",
+"doj",
+"payPeriod",
+"pfNumber",
+"uan",
+"basicPay",
+"transport",
+"meal",
+"professionalTax",
+"insurance",
+"sodexo",
+"bankName",
+"bankAccount"
+];
+
+let isValid = true;
+
+
+/* CHECK EMPTY FIELDS */
+
+requiredFields.forEach(function(id){
+
+let field =
+document.getElementById(id);
+
+if(field){
+
+if(field.value.trim() === ""){
+
+field.style.border =
+"2px solid red";
+
+isValid = false;
+
+
+/* REMOVE RED WHEN USER TYPES */
+
+field.addEventListener("input", function(){
+
+if(this.value.trim() !== ""){
+
+this.style.border =
+"1px solid #ccc";
+
+}
+
+});
+
+}else{
+
+field.style.border =
+"1px solid #ccc";
+
+}
+
+}
+
+});
+
+
+/* STOP DOWNLOAD */
+
+if(!isValid){
+
+alert(
+"Please fill all required details before downloading payslip."
+);
+
+return;
+
+}
+
+
+/* DOWNLOAD */
+
+window.print();
 
 }

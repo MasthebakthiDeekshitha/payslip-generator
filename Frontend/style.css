@@ -585,3 +585,278 @@ body{
 color:red;
 font-size:13px;
 }
+/* MAKE COMPLETE FORM SMALLER */
+
+.main-container{
+
+width:85%;
+
+padding:15px;
+
+}
+
+
+
+.section-box{
+
+padding:15px;
+
+margin-top:15px;
+
+}
+
+
+
+.form-control{
+
+height:38px;
+
+font-size:14px;
+
+padding:8px;
+
+}
+
+
+
+label{
+
+font-size:14px;
+
+}
+
+
+
+.section-title{
+
+font-size:18px;
+
+}
+
+
+
+.company-title{
+
+font-size:24px;
+
+}
+
+
+
+.sub-title{
+
+font-size:16px;
+
+}
+
+
+
+.salary-row{
+
+gap:15px;
+
+}
+
+
+
+.employee-grid{
+
+gap:25px;
+
+}
+
+
+
+.btn{
+
+min-width:150px;
+
+font-size:16px;
+
+padding:8px 15px;
+
+}
+/* ================= FINAL ONE PAGE A4 PAYSLIP ================= */
+
+@media print {
+
+@page {
+    size: A4;
+    margin: 5mm;
+}
+
+html,
+body {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    padding: 0;
+    background: white;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    overflow: hidden;
+}
+
+/* MAIN */
+
+.main-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 5px;
+    border: none;
+    box-shadow: none;
+    background: white;
+}
+
+/* REMOVE INPUT BOXES */
+
+input,
+select {
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+    font-size: 10px !important;
+    color: black !important;
+    font-weight: 500;
+}
+
+/* HIDE BUTTONS */
+
+button,
+.btn {
+    display: none !important;
+}
+
+/* LOGO */
+
+.logo {
+    width: 45px !important;
+    height: 45px !important;
+}
+
+/* TITLES */
+
+.company-title {
+    font-size: 22px !important;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.sub-title {
+    font-size: 11px !important;
+    margin-bottom: 8px;
+}
+
+/* SECTION */
+
+.section-box {
+    border: 1px solid #000;
+    padding: 5px;
+    margin-bottom: 5px;
+    page-break-inside: avoid;
+}
+
+/* EMPLOYEE DETAILS */
+
+.employee-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px 20px;
+}
+
+.detail-row-inline {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.detail-row-inline label {
+    width: 85px;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+/* SECTION TITLES */
+
+.section-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #003366;
+    margin-bottom: 4px;
+}
+
+/* TABLE ROWS */
+
+.salary-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 3px;
+    align-items: center;
+}
+
+/* COLUMN HEADINGS */
+
+.amount-heading {
+    font-weight: bold;
+    text-align: center;
+    font-size: 10px;
+}
+
+/* TOTALS */
+
+.total-row {
+    font-weight: bold;
+    font-size: 11px;
+}
+
+/* FORMULA */
+
+.formula-text {
+    text-align: center;
+    font-weight: bold;
+    margin: 6px 0;
+    font-size: 11px;
+}
+
+/* NET PAY GRID */
+
+.formula-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    text-align: center;
+}
+
+/* REMOVE RED VALIDATION */
+
+.error,
+.error-text {
+    display: none !important;
+}
+
+input.error-border {
+    border: none !important;
+}
+
+/* PREVENT PAGE BREAK */
+
+* {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
+
+}
+.error-border{
+border:2px solid red !important;
+}
+
+.success-border{
+border:1px solid #28a745 !important;
+}
