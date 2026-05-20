@@ -7,11 +7,16 @@ body{
 }
 
 .main-container{
-    width:95%;
-    margin:auto;
-    background:#fff;
-    border:2px solid #000;
-    padding:20px;
+
+    width: 85%;
+    max-width: 1100px;
+
+    margin: 20px auto;
+
+    padding: 20px;
+
+    background: #fff;
+
 }
 
 /* ================= HEADER ================= */
@@ -821,7 +826,7 @@ button,
 .formula-text {
     text-align: center;
     font-weight: bold;
-    margin: 6px 0;
+    margin:6px 0;
     font-size: 11px;
 }
 
@@ -860,3 +865,87 @@ border:2px solid red !important;
 .success-border{
 border:1px solid #28a745 !important;
 }
+/* ================= PERFECT COMPACT FORM ================= */
+
+.employee-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    column-gap:20px;
+
+}
+
+/* EACH ROW */
+
+.detail-row-inline{
+
+    display:grid;
+
+    grid-template-columns:120px 1fr;
+
+    align-items:center;
+
+    margin-bottom:10px;
+
+    column-gap:10px;
+
+}
+
+/* LABELS */
+
+.detail-row-inline label{
+
+    font-size:15px;
+
+    font-weight:600;
+
+    margin:0;
+
+}
+
+/* INPUTS */
+
+.detail-row-inline input,
+.detail-row-inline select,
+.form-control{
+
+    width:100% !important;
+
+    height:42px !important;
+
+    padding:8px 12px !important;
+
+    font-size:15px !important;
+
+    border-radius:8px !important;
+
+    box-sizing:border-box !important;
+
+}
+
+/* PAY PERIOD */
+
+.pay-period{
+
+    display:grid;
+
+    grid-template-columns:1fr auto 1fr;
+
+    gap:6px;
+
+    align-items:center;
+
+}
+
+/* BUTTONS */
+
+.button-section{
+
+    gap:10px;
+
+    margin-top:15px;
+
+}
+

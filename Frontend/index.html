@@ -11,6 +11,7 @@
     <!-- Bootstrap -->
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
 
     <!-- CSS -->
 
@@ -38,9 +39,12 @@
                 NR Softech (I) Pvt. Ltd.
             </h1>
 
-            <h2 class="sub-title">
-                Payslip Generator
-            </h2>
+           <h4 id="payslipMonth"
+    style="font-size:18px;
+           font-weight:bold;
+           margin-top:5px;">
+    Payslip for the Month
+</h4>
 
         </div>
 
@@ -64,14 +68,25 @@
 
                 <label>Name</label>
 
-                <input
-                type="text"
-                id="name"
-                class="form-control required-field"
-                placeholder="Enter Name"
-                oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')">
+               <input
+type="text"
+id="name"
+class="form-control required-field"
+placeholder="Enter Name"
+spellcheck="false"
+autocomplete="off"
+
+oninput="
+
+this.value=this.value
+.replace(/[^a-zA-Z ]/g,'')
+.toUpperCase();
+
+"
+>
 
             </div>
+
 
 
 
@@ -80,11 +95,21 @@
                 <label>Designation</label>
 
                 <input
-                type="text"
-                id="designation"
-                class="form-control required-field"
-                placeholder="Enter Designation"
-                oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')">
+type="text"
+id="designation"
+class="form-control required-field"
+placeholder="Enter Designation"
+spellcheck="false"
+autocomplete="off"
+
+oninput="
+
+this.value=this.value
+.replace(/[^a-zA-Z ]/g,'')
+.toUpperCase();
+
+"
+>
 
             </div>
 
@@ -94,12 +119,22 @@
 
                 <label>Department</label>
 
-                <input
-                type="text"
-                id="department"
-                class="form-control required-field"
-                placeholder="Enter Department"
-                oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')">
+             <input
+type="text"
+id="department"
+class="form-control required-field"
+placeholder="Enter Department"
+spellcheck="false"
+autocomplete="off"
+
+oninput="
+
+this.value=this.value
+.replace(/[^a-zA-Z ]/g,'')
+.toUpperCase();
+
+"
+>
 
             </div>
 
@@ -111,22 +146,48 @@
 
                 <div class="pay-period">
 
-    <input
+<input
 type="date"
 id="payPeriod"
 class="form-control required-field"
-max="2099-12-31"
-min="2000-01-01"
-onkeydown="return false"
-onchange="setLastDate()">
+
+onchange="
+
+setLastDate();
+calculatePayslip();
+updatePayslipMonth();
+
+
+"
+
+oninput="
+
+setLastDate();
+calculatePayslip();
+
+"
+>
 
     <span>to</span>
+<input
+type="date"
+id="payDate"
+class="form-control required-field"
 
-    <input
-    type="text"
-    id="payDate"
-    class="form-control readonly-field"
-    readonly>
+onchange="
+
+calculatePaidDays();
+calculatePayslip();
+
+"
+
+oninput="
+
+calculatePaidDays();
+calculatePayslip();
+
+"
+>
 
                 </div>
 
@@ -252,8 +313,24 @@ class="form-control required-field"
 maxlength="10"
 placeholder="Enter PAN"
 
+
 oninput="
-this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')
+
+this.value=this.value
+.toUpperCase()
+.replace(/[^A-Z0-9]/g,'');
+
+this.style.border='1px solid #ccc';
+
+document.getElementById('panError').innerHTML='';
+
+"
+onfocus="
+
+this.style.border='1px solid #ccc';
+
+document.getElementById('panError').innerHTML='';
+
 "
 
 onblur="
@@ -287,13 +364,28 @@ document.getElementById('panError').innerHTML='';
 
                 <label>DOJ</label>
 
-                <input
+<input
 type="date"
 id="doj"
-class="form-control required-field"
-max="2099-12-31"
-min="2000-01-01"
-onkeydown="return false">
+class="form-control"
+placeholder="dd-mm-yyyy"
+
+min="1000-01-01"
+max="9999-12-31"
+
+onchange="
+
+let year =
+this.value.split('-')[0];
+
+if(year.length > 4){
+
+this.value='';
+
+}
+
+"
+>
 
             </div>
  
@@ -308,7 +400,6 @@ onkeydown="return false">
 type="text"
 id="paidDays"
 class="form-control readonly-field"
-value="0.00"
 readonly>
 
             </div>
@@ -360,14 +451,41 @@ document.getElementById('uanError').innerHTML='';
 "
 >
 
+
 <small id="uanError" class="error-text"></small>
             </div>
+            <div class="detail-row-inline mt-2">
+
+<label class="fw-bold">
+Actual Basic Pay
+</label>
+
+<input
+type="text"
+id="actualBasicPay"
+class="form-control"
+placeholder="Enter Actual Basic Pay"
+
+oninput="
+
+this.value=this.value
+.replace(/[^0-9]/g,'');
+
+calculatePayslip();
+
+"
+>
+
+</div>
+            
 
         </div>
+        
 
     </div>
 
 </div>
+
 
 
 
@@ -409,15 +527,16 @@ document.getElementById('uanError').innerHTML='';
 
     <label>Basic Pay</label>
 
-  <input
-type="number"
+<input
+type="text"
 id="basicPay"
-class="form-control required-field"
-placeholder="Enter Monthly Basic Pay"
-oninput="calculatePayslip()"
+readonly
+class="form-control"
+
+
 >
 
-    <input
+ <input
     type="text"
     id="basicPayYear"
     class="form-control readonly-field"
@@ -662,7 +781,7 @@ oninput="calculatePayslip()">
         <input
 type="number"
 id="sodexo"
-class="form-control required-field"
+class="form-control readonly"
 oninput="calculatePayslip()">
 
         <input
@@ -933,6 +1052,20 @@ onclick="downloadPayslip()">
 
 Download Payslip
 
+</button>
+<button type="button"
+        onclick="clearForm()"
+        style="
+        background-color:#0d6efd;
+        color:white;
+        border:none;
+        padding:12px 25px;
+        border-radius:8px;
+        font-size:16px;
+        cursor:pointer;
+        margin-left:10px;">
+
+    Clear
 </button>
 
 </button>

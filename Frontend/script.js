@@ -1,11 +1,11 @@
 function calculatePayslip() {
 
     // =========================
-    // BASIC VALUES
+    // GET VALUES
     // =========================
 
-    let basicPay =
-    parseFloat(document.getElementById("basicPay").value) || 0;
+    let actualBasicPay =
+    parseFloat(document.getElementById("actualBasicPay").value) || 0;
 
     let transport =
     parseFloat(document.getElementById("transport").value) || 0;
@@ -19,59 +19,46 @@ function calculatePayslip() {
     let insurance =
     parseFloat(document.getElementById("insurance").value) || 0;
 
-    let sodexo =
-    parseFloat(document.getElementById("sodexo").value) || 0;
-
 
     // =========================
-    // PAY PERIOD DATE
+    // GET MONTH
     // =========================
 
-    let payPeriod =
+    let fromDate =
     document.getElementById("payPeriod").value;
 
-    let totalDays = 30;
-    let paidDays = 30;
+    let ytd = 1;
 
-    if(payPeriod){
-
-        let selectedDate =
-        new Date(payPeriod);
-
-        let year =
-        selectedDate.getFullYear();
+    if(fromDate){
 
         let month =
-        selectedDate.getMonth();
+        new Date(fromDate).getMonth() + 1;
 
-        // Total days in selected month
-        totalDays =
-        new Date(year, month + 1, 0).getDate();
+        // Financial year starts from April
 
-        // Selected start day
-        let selectedDay =
-        selectedDate.getDate();
+        if(month >= 4){
 
-        // Paid days calculation
-        paidDays =
-        totalDays - selectedDay + 1;
+            ytd = month - 3;
+
+        }
+        else{
+
+            ytd = month + 9;
+
+        }
+
     }
 
 
     // =========================
-    // PAID DAYS
+    // BASIC PAY
     // =========================
 
-    document.getElementById("paidDays").value =
-    paidDays.toFixed(2);
+    let basicPay =
+    actualBasicPay * 0.672043;
 
-
-    // =========================
-    // ACTUAL BASIC
-    // =========================
-
-    let actualBasic =
-    (basicPay / totalDays) * paidDays;
+    document.getElementById("basicPay").value =
+    basicPay.toFixed(2);
 
 
     // =========================
@@ -79,7 +66,31 @@ function calculatePayslip() {
     // =========================
 
     let hra =
-    actualBasic * 0.50;
+    basicPay * 0.50;
+
+    document.getElementById("hra").value =
+    hra.toFixed(2);
+
+
+    // =========================
+    // PF
+    // =========================
+
+    let pf =
+    basicPay * 0.12;
+
+    document.getElementById("pfContribution").value =
+    pf.toFixed(2);
+
+
+    // =========================
+    // SODEXO
+    // =========================
+
+    let sodexo = meal;
+
+    document.getElementById("sodexo").value =
+    sodexo.toFixed(2);
 
 
     // =========================
@@ -87,10 +98,64 @@ function calculatePayslip() {
     // =========================
 
     let totalEarnings =
-    actualBasic +
+    basicPay +
     hra +
     transport +
     meal;
+
+    document.getElementById("totalEarnings").value =
+    totalEarnings.toFixed(2);
+
+
+    // =========================
+    // YEARLY EARNINGS
+    // =========================
+
+    let yearlyEarnings =
+    totalEarnings * 12;
+
+
+    // =========================
+    // TAX SLAB
+    // =========================
+
+    let taxPercent = 0;
+
+    if(yearlyEarnings <= 400000){
+
+        taxPercent = 0;
+
+    }
+    else if(yearlyEarnings <= 800000){
+
+        taxPercent = 5;
+
+    }
+    else if(yearlyEarnings <= 1200000){
+
+        taxPercent = 10;
+
+    }
+    else if(yearlyEarnings <= 1600000){
+
+        taxPercent = 15;
+
+    }
+    else if(yearlyEarnings <= 2000000){
+
+        taxPercent = 20;
+
+    }
+    else if(yearlyEarnings <= 2400000){
+
+        taxPercent = 25;
+
+    }
+    else{
+
+        taxPercent = 30;
+
+    }
 
 
     // =========================
@@ -98,15 +163,18 @@ function calculatePayslip() {
     // =========================
 
     let incomeTax =
-    totalEarnings * 0.10;
+    (totalEarnings * taxPercent) / 100;
+
+    document.getElementById("incomeTax").value =
+    incomeTax.toFixed(2);
 
 
     // =========================
-    // PF CONTRIBUTION
+    // TOTAL TAX
     // =========================
 
-    let pf =
-    actualBasic * 0.12;
+    document.getElementById("totalTax").value =
+    incomeTax.toFixed(2);
 
 
     // =========================
@@ -117,7 +185,10 @@ function calculatePayslip() {
     pf +
     professionalTax +
     insurance +
-    sodexo;
+    incomeTax;
+
+    document.getElementById("totalDeductions").value =
+    totalDeductions.toFixed(2);
 
 
     // =========================
@@ -126,75 +197,51 @@ function calculatePayslip() {
 
     let netPay =
     totalEarnings -
-    incomeTax -
     totalDeductions;
-
-
-    // =========================
-    // CURRENT PERIOD VALUES
-    // =========================
-
-    document.getElementById("hra").value =
-    hra.toFixed(2);
-
-    document.getElementById("incomeTax").value =
-    incomeTax.toFixed(2);
-
-    document.getElementById("pfContribution").value =
-    pf.toFixed(2);
-
-    document.getElementById("totalEarnings").value =
-    totalEarnings.toFixed(2);
-
-    document.getElementById("totalTax").value =
-    incomeTax.toFixed(2);
-
-    document.getElementById("totalDeductions").value =
-    totalDeductions.toFixed(2);
 
     document.getElementById("netPay").value =
     netPay.toFixed(2);
 
 
     // =========================
-    // YEAR VALUES
+    // YEAR TO DATE VALUES
     // =========================
 
     document.getElementById("basicPayYear").value =
-    (actualBasic * 12).toFixed(2);
+    (basicPay * ytd).toFixed(2);
 
     document.getElementById("hraYear").value =
-    (hra * 12).toFixed(2);
+    (hra * ytd).toFixed(2);
 
     document.getElementById("transportYear").value =
-    (transport * 12).toFixed(2);
+    (transport * ytd).toFixed(2);
 
     document.getElementById("mealYear").value =
-    (meal * 12).toFixed(2);
-
-    document.getElementById("incomeTaxYear").value =
-    (incomeTax * 12).toFixed(2);
-
-    document.getElementById("pfYear").value =
-    (pf * 12).toFixed(2);
-
-    document.getElementById("professionalTaxYear").value =
-    (professionalTax * 12).toFixed(2);
-
-    document.getElementById("insuranceYear").value =
-    (insurance * 12).toFixed(2);
-
-    document.getElementById("sodexoYear").value =
-    (sodexo * 12).toFixed(2);
+    (meal * ytd).toFixed(2);
 
     document.getElementById("totalEarningsYear").value =
-    (totalEarnings * 12).toFixed(2);
+    (totalEarnings * ytd).toFixed(2);
 
-    document.getElementById("totalTaxYear").value =
-    (incomeTax * 12).toFixed(2);
+    document.getElementById("incomeTaxYear").value =
+    (incomeTax * ytd).toFixed(2);
+
+    document.getElementById("pfYear").value =
+    (pf * ytd).toFixed(2);
+
+    document.getElementById("professionalTaxYear").value =
+    (professionalTax * ytd).toFixed(2);
+
+    document.getElementById("insuranceYear").value =
+    (insurance * ytd).toFixed(2);
+
+    document.getElementById("sodexoYear").value =
+    (sodexo * ytd).toFixed(2);
 
     document.getElementById("totalDeductionsYear").value =
-    (totalDeductions * 12).toFixed(2);
+    (totalDeductions * ytd).toFixed(2);
+
+    document.getElementById("totalTaxYear").value =
+    (incomeTax * ytd).toFixed(2);
 
 
     // =========================
@@ -313,36 +360,96 @@ alert("Payslip saved successfully!");
 
 console.log("Payslip Saved");
 
-}function setLastDate() {
+}function setLastDate(){
 
-    let payPeriod = document.getElementById("payPeriod").value;
+    let fromDate =
+    document.getElementById("payPeriod").value;
 
-    if (!payPeriod) return;
+    if(fromDate === ''){
 
-    let selectedDate = new Date(payPeriod);
+        document.getElementById("payDate").value='';
 
-    let year = selectedDate.getFullYear();
-    let month = selectedDate.getMonth();
+        document.getElementById("paidDays").value='';
 
-    // Last date of selected month
-    let lastDate = new Date(year, month + 1, 0);
+        return;
+    }
 
-    // Format last date
-    let day = String(lastDate.getDate()).padStart(2, '0');
-    let monthValue = String(month + 1).padStart(2, '0');
-    let formattedDate = `${day}-${monthValue}-${year}`;
+    let selectedDate =
+    new Date(fromDate);
 
-    document.getElementById("payDate").value = formattedDate;
+    let year =
+    selectedDate.getFullYear();
 
-    // Calculate Paid Days
-    let selectedDay = selectedDate.getDate();
-    let totalDays = lastDate.getDate();
+    let month =
+    selectedDate.getMonth();
 
-    let paidDays = totalDays - selectedDay + 1;
+    // MONTH END DATE
 
-    document.getElementById("paidDays").value = paidDays;
+    let monthEnd =
+    new Date(year, month + 1, 0);
 
-    calculateSalary();
+    // FORMAT YYYY-MM-DD
+
+    let yyyy =
+    monthEnd.getFullYear();
+
+    let mm =
+    String(monthEnd.getMonth()+1)
+    .padStart(2,'0');
+
+    let dd =
+    String(monthEnd.getDate())
+    .padStart(2,'0');
+
+    let formattedDate =
+    `${yyyy}-${mm}-${dd}`;
+
+    // AUTO SET TO DATE
+
+    document.getElementById("payDate").value =
+    formattedDate;
+
+    calculatePaidDays();
+}
+
+function calculatePaidDays(){
+
+    let fromDate =
+    document.getElementById("payPeriod").value;
+
+    let toDate =
+    document.getElementById("payDate").value;
+
+    if(fromDate === '' || toDate === ''){
+
+        document.getElementById("paidDays").value='';
+
+        return;
+    }
+
+    let start =
+    new Date(fromDate);
+
+    let end =
+    new Date(toDate);
+
+    // DIFFERENCE
+
+    let difference =
+    end - start;
+
+    let days =
+    Math.floor(
+    difference / (1000 * 60 * 60 * 24)
+    ) + 1;
+
+    if(days < 0){
+
+        days = 0;
+    }
+
+    document.getElementById("paidDays").value =
+    days;
 }
 function downloadPayslip(){
 
@@ -357,6 +464,7 @@ let requiredFields = [
 "payPeriod",
 "pfNumber",
 "uan",
+"actualBasicPay",
 "basicPay",
 "transport",
 "meal",
@@ -430,3 +538,66 @@ return;
 window.print();
 
 }
+function updatePayslipMonth() {
+
+    const payPeriod =
+        document.getElementById("payPeriod").value;
+
+    if (payPeriod) {
+
+        const date = new Date(payPeriod);
+
+        const month =
+            date.toLocaleString('default',
+            { month: 'long' });
+
+        const year =
+            date.getFullYear();
+
+        document.getElementById("payslipMonth").innerText =
+            "Payslip for the Month of "
+            + month + " - " + year;
+    }
+}
+window.clearForm = function () {
+
+    // Clear all text boxes
+    let inputs = document.getElementsByTagName("input");
+
+    for (let i = 0; i < inputs.length; i++) {
+
+        inputs[i].value = "";
+
+    }
+
+};
+document.addEventListener("keydown", function (e) {
+
+    if (e.key === "Tab") {
+
+        const fields = Array.from(
+            document.querySelectorAll(
+                "input:not([readonly]), select:not([readonly]), textarea:not([readonly])"
+            )
+        );
+
+        const currentIndex = fields.indexOf(document.activeElement);
+
+        if (currentIndex > -1) {
+
+            e.preventDefault();
+
+            const nextField =
+                fields[currentIndex + 1];
+
+            if (nextField) {
+
+                nextField.focus();
+
+            }
+
+        }
+
+    }
+
+});
