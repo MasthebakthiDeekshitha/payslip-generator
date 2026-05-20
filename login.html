@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login</title>
+
+    <link rel="stylesheet" href="login.css">
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <div class="header">
+  <img src="./Frontend/Logo.png" class="logo">
+
+        <div>
+
+            <h1>NR Softech Pvt Ltd.</h1>
+
+            <h3>Hyderabad, Telangana - 500062</h3>
+
+            <a href="#">Admin Portal</a>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+
+    <!-- LOGIN BOX -->
+
+    <div class="login-container">
+
+        <h2>Admin Login</h2>
+
+        <div class="input-group">
+
+            <label>Admin ID</label>
+
+            <input
+            type="text"
+            id="adminId"
+            placeholder="Enter Admin ID"
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Password</label>
+
+            <input
+            type="password"
+            id="password"
+            placeholder="Enter Password"
+            >
+
+        </div>
+
+        <button onclick="login()">
+            Login
+        </button>
+
+        <p id="error"></p>
+
+    </div>
+
+    <script src="login.js"></script>
+
+</body>
+
+</html>

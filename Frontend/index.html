@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Payslip Generator</title>
+    
 
     <!-- Bootstrap -->
 
@@ -14,9 +15,11 @@
     
 
     <!-- CSS -->
+     
 
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -400,6 +403,7 @@ this.value='';
 type="text"
 id="paidDays"
 class="form-control readonly-field"
+value="0.00"
 readonly>
 
             </div>
@@ -526,15 +530,15 @@ calculatePayslip();
        <div class="salary-row">
 
     <label>Basic Pay</label>
-
 <input
 type="text"
 id="basicPay"
-readonly
 class="form-control"
+readonly
+value="0.00"
+style="background:#f5f5f5; cursor:not-allowed;"
+oninput="calculatePayslip()">
 
-
->
 
  <input
     type="text"
@@ -662,12 +666,14 @@ oninput="calculatePayslip()">
     type="text"
     id="incomeTax"
     class="form-control readonly-field"
+    value="0.00"
     readonly>
 
     <input
     type="text"
     id="incomeTaxYear"
     class="form-control readonly-field"
+      value="0.00"
     readonly>
 
 </div>
@@ -683,12 +689,14 @@ oninput="calculatePayslip()">
     type="text"
     id="totalTax"
     class="form-control readonly-field"
+      value="0.00"
     readonly>
 
     <input
     type="text"
     id="totalTaxYear"
     class="form-control readonly-field"
+      value="0.00"
     readonly>
 
 </div>
@@ -778,11 +786,17 @@ oninput="calculatePayslip()">
 
         <label>Sodexo Deduction</label>
 
-        <input
-type="number"
+<input
+type="text"
 id="sodexo"
-class="form-control readonly"
+class="form-control"
+readonly
+
+style="background:#f5f5f5; cursor:not-allowed;"
+value="0.00"
 oninput="calculatePayslip()">
+
+
 
         <input
         type="text"
@@ -1002,6 +1016,7 @@ document.getElementById('bankError').innerHTML='';
 type="text"
 id="netPay"
 class="form-control readonly-field"
+value="0.00"
 readonly>
 
 
@@ -1047,12 +1062,12 @@ Save Payslip
 </button>
 <button
 type="button"
-class="btn btn-danger"
-onclick="downloadPayslip()">
-
+class="btn btn-primary"
+onclick="downloadPayslip()"
+>
 Download Payslip
-
 </button>
+
 <button type="button"
         onclick="clearForm()"
         style="

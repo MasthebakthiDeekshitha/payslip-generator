@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="dashboard.css">
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <img src="./Frontend/Logo.png" class="logo">
+
+        <div>
+
+            <h1>NR Softech Pvt Ltd.</h1>
+
+            <h3>Hyderabad, Telangana - 500062</h3>
+
+            <p>Admin Portal</p>
+
+        </div>
+
+    </div>
+
+    <!-- DASHBOARD -->
+
+    <div class="dashboard-container">
+
+        <div class="top-section">
+
+            <h2>Employee Database</h2>
+
+            <button class="logout-btn" onclick="logout()">
+                Sign Out
+            </button>
+
+        </div>
+
+        <div class="action-bar">
+
+            <button class="add-btn"
+            onclick="openPayslip()">
+
+                + Add New Employee (Payslip)
+
+            </button>
+
+            <div class="search-box">
+
+                <input
+                type="text"
+                placeholder="Search Employee">
+
+                <button>
+                    Search
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- TABLE -->
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Pers No</th>
+                    <th>Designation</th>
+                    <th>Pay Period</th>
+                    <th>Net Pay</th>
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+           <tbody id="employeeTable">
+
+</tbody>
+        </table>
+
+    </div>
+
+    <script src="dashboard.js"></script>
+
+</body>
+</html>

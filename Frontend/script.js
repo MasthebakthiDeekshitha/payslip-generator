@@ -21,41 +21,67 @@ function calculatePayslip() {
 
 
     // =========================
-    // GET MONTH
+    // PAY PERIOD
     // =========================
 
     let fromDate =
     document.getElementById("payPeriod").value;
 
-    let ytd = 1;
+    let toDate =
+    document.getElementById("payDate").value;
 
-    if(fromDate){
+
+    let totalDays = 30;
+    let paidDays = 0;
+
+    if(fromDate && toDate){
+
+        let startDate =
+        new Date(fromDate);
+
+        let endDate =
+        new Date(toDate);
+
+        let year =
+        startDate.getFullYear();
 
         let month =
-        new Date(fromDate).getMonth() + 1;
+        startDate.getMonth();
 
-        // Financial year starts from April
+        totalDays =
+        new Date(year, month + 1, 0).getDate();
 
-        if(month >= 4){
+        let difference =
+        endDate.getTime() - startDate.getTime();
 
-            ytd = month - 3;
-
-        }
-        else{
-
-            ytd = month + 9;
-
-        }
+        paidDays =
+        Math.floor(
+        difference / (1000 * 60 * 60 * 24)
+        ) + 1;
 
     }
+
+
+    // =========================
+    // SHOW PAID DAYS
+    // =========================
+
+    document.getElementById("paidDays").value =
+    paidDays;
 
 
     // =========================
     // BASIC PAY
     // =========================
 
-    let basicPay =
-    actualBasicPay * 0.672043;
+    let basicPay = 0;
+
+    if(totalDays > 0){
+
+        basicPay =
+        (actualBasicPay / totalDays) * paidDays;
+
+    }
 
     document.getElementById("basicPay").value =
     basicPay.toFixed(2);
@@ -185,6 +211,7 @@ function calculatePayslip() {
     pf +
     professionalTax +
     insurance +
+    sodexo +
     incomeTax;
 
     document.getElementById("totalDeductions").value =
@@ -204,59 +231,57 @@ function calculatePayslip() {
 
 
     // =========================
-    // YEAR TO DATE VALUES
+    // YEAR VALUES
     // =========================
 
     document.getElementById("basicPayYear").value =
-    (basicPay * ytd).toFixed(2);
+    (basicPay * 12).toFixed(2);
 
     document.getElementById("hraYear").value =
-    (hra * ytd).toFixed(2);
+    (hra * 12).toFixed(2);
 
     document.getElementById("transportYear").value =
-    (transport * ytd).toFixed(2);
+    (transport * 12).toFixed(2);
 
     document.getElementById("mealYear").value =
-    (meal * ytd).toFixed(2);
+    (meal * 12).toFixed(2);
 
     document.getElementById("totalEarningsYear").value =
-    (totalEarnings * ytd).toFixed(2);
+    (totalEarnings * 12).toFixed(2);
 
     document.getElementById("incomeTaxYear").value =
-    (incomeTax * ytd).toFixed(2);
+    (incomeTax * 12).toFixed(2);
 
     document.getElementById("pfYear").value =
-    (pf * ytd).toFixed(2);
+    (pf * 12).toFixed(2);
 
     document.getElementById("professionalTaxYear").value =
-    (professionalTax * ytd).toFixed(2);
+    (professionalTax * 12).toFixed(2);
 
     document.getElementById("insuranceYear").value =
-    (insurance * ytd).toFixed(2);
+    (insurance * 12).toFixed(2);
 
     document.getElementById("sodexoYear").value =
-    (sodexo * ytd).toFixed(2);
+    (sodexo * 12).toFixed(2);
 
     document.getElementById("totalDeductionsYear").value =
-    (totalDeductions * ytd).toFixed(2);
+    (totalDeductions * 12).toFixed(2);
 
     document.getElementById("totalTaxYear").value =
-    (incomeTax * ytd).toFixed(2);
+    (incomeTax * 12).toFixed(2);
+    
+// =========================
+// FORMULA SECTION
+// =========================
 
+document.getElementById("formulaEarnings").value =
+totalEarnings.toFixed(2);
 
-    // =========================
-    // FORMULA VALUES
-    // =========================
+document.getElementById("formulaTaxes").value =
+incomeTax.toFixed(2);
 
-    document.getElementById("formulaEarnings").value =
-    totalEarnings.toFixed(2);
-
-    document.getElementById("formulaTaxes").value =
-    incomeTax.toFixed(2);
-
-    document.getElementById("formulaDeductions").value =
-    totalDeductions.toFixed(2);
-
+document.getElementById("formulaDeductions").value =
+totalDeductions.toFixed(2);
 }
 function savePayslip(){
 
@@ -450,92 +475,48 @@ function calculatePaidDays(){
 
     document.getElementById("paidDays").value =
     days;
-}
-function downloadPayslip(){
+}function downloadPayslip(){
 
-let requiredFields = [
+    // REQUIRED FIELDS
 
-"name",
-"persNo",
-"designation",
-"pan",
-"department",
-"doj",
-"payPeriod",
-"pfNumber",
-"uan",
-"actualBasicPay",
-"basicPay",
-"transport",
-"meal",
-"professionalTax",
-"insurance",
-"sodexo",
-"bankName",
-"bankAccount"
-];
+    let requiredFields =
+    document.querySelectorAll(".required-field");
 
-let isValid = true;
+    let isValid = true;
 
+    requiredFields.forEach(function(field){
 
-/* CHECK EMPTY FIELDS */
+        if(field.value.trim()===""){
 
-requiredFields.forEach(function(id){
+            field.style.border =
+            "2px solid red";
 
-let field =
-document.getElementById(id);
+            isValid = false;
 
-if(field){
+        }
 
-if(field.value.trim() === ""){
+        else{
 
-field.style.border =
-"2px solid red";
+            field.style.border =
+            "1px solid #ccc";
 
-isValid = false;
+        }
 
+    });
 
-/* REMOVE RED WHEN USER TYPES */
+    // STOP DOWNLOAD
 
-field.addEventListener("input", function(){
+    if(!isValid){
 
-if(this.value.trim() !== ""){
+        alert("Please fill all required fields");
 
-this.style.border =
-"1px solid #ccc";
+        return;
 
-}
+    }
 
-});
+    // PRINT
 
-}else{
-
-field.style.border =
-"1px solid #ccc";
-
-}
-
-}
-
-});
-
-
-/* STOP DOWNLOAD */
-
-if(!isValid){
-
-alert(
-"Please fill all required details before downloading payslip."
-);
-
-return;
-
-}
-
-
-/* DOWNLOAD */
-
-window.print();
+    window.print();
 
 }
 function updatePayslipMonth() {
@@ -601,3 +582,76 @@ document.addEventListener("keydown", function (e) {
     }
 
 });
+function savePayslip(){
+
+    let employees =
+    JSON.parse(localStorage.getItem("employees")) || [];
+
+    let employee = {
+
+        id: Date.now(),
+
+        name:
+        document.getElementById("name").value,
+
+        persNo:
+        document.getElementById("persNo").value,
+
+        designation:
+        document.getElementById("designation").value,
+
+        payPeriod:
+        document.getElementById("payPeriod").value
+        + " to " +
+        document.getElementById("payDate").value,
+
+        netPay:
+        document.getElementById("netPay").value
+
+    };
+
+    employees.push(employee);
+
+    localStorage.setItem(
+        "employees",
+        JSON.stringify(employees)
+    );
+
+    alert("Payslip Saved Successfully");
+
+    window.location.href =
+    "../dashboard.html";
+
+}
+window.onload = function(){
+
+    let editId =
+    localStorage.getItem("editEmployeeId");
+
+    if(editId){
+
+        let employees =
+        JSON.parse(localStorage.getItem("employees")) || [];
+
+        let employee =
+        employees.find(emp => emp.id == editId);
+
+        if(employee){
+
+            document.getElementById("name").value =
+            employee.name;
+
+            document.getElementById("persNo").value =
+            employee.persNo;
+
+            document.getElementById("designation").value =
+            employee.designation;
+            
+           
+            
+
+        }
+
+    }
+
+}
