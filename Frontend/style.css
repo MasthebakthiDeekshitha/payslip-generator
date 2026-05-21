@@ -731,12 +731,12 @@ select {
     font-weight: 500;
 }
 
-/* HIDE BUTTONS */
+    /* HIDE BUTTONS */
 
-button,
-.btn {
-    display: none !important;
-}
+    button,
+    .btn {
+        display: none !important;
+    }
 
 /* LOGO */
 

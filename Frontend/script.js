@@ -552,36 +552,7 @@ window.clearForm = function () {
     }
 
 };
-document.addEventListener("keydown", function (e) {
 
-    if (e.key === "Tab") {
-
-        const fields = Array.from(
-            document.querySelectorAll(
-                "input:not([readonly]), select:not([readonly]), textarea:not([readonly])"
-            )
-        );
-
-        const currentIndex = fields.indexOf(document.activeElement);
-
-        if (currentIndex > -1) {
-
-            e.preventDefault();
-
-            const nextField =
-                fields[currentIndex + 1];
-
-            if (nextField) {
-
-                nextField.focus();
-
-            }
-
-        }
-
-    }
-
-});
 function savePayslip(){
 
     let employees =
@@ -589,7 +560,9 @@ function savePayslip(){
 
     let employee = {
 
-        id: Date.now(),
+       id: localStorage.getItem("editEmployeeId")
+? Number(localStorage.getItem("editEmployeeId"))
+: Date.now(),
 
         name:
         document.getElementById("name").value,
@@ -655,3 +628,24 @@ window.onload = function(){
     }
 
 }
+// =========================
+// SKIP READONLY FIELDS
+// =========================
+
+document.addEventListener("DOMContentLoaded", function(){
+
+const readonlyFields =
+
+document.querySelectorAll(
+
+'input[readonly]'
+
+);
+
+readonlyFields.forEach(function(field){
+
+field.setAttribute("tabindex", "-1");
+
+});
+
+});
